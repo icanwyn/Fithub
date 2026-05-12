@@ -10,45 +10,55 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
-  /* [All your existing styles - kept exactly the same] */
-  :root{--navy:#0D1B3E;--navy2:#162248;--navy3:#1E2F5A;--navy-lt:#243570;--gold:#C9A84C;--gold-lt:#F0D98B;--gold-dk:#9B7A2A;--gold-glow:rgba(201,168,76,0.18);--bg:#09122B;--surface:#162248;--surface2:#1E2F5A;--surface3:#243570;--border:rgba(201,168,76,0.18);--border2:rgba(201,168,76,0.32);--text:#F0E6C8;--text2:#A8B4CC;--text3:#6B7A99;--red:#D4574A;--red-lt:rgba(212,87,74,0.15);--purple:#7B6FD4;--purple-lt:rgba(123,111,212,0.18);--green:#C9A84C;--green-lt:rgba(201,168,76,0.15);--green-dk:#9B7A2A;font-family:'DM Sans',sans-serif;}
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;background-image:repeating-linear-gradient(45deg,rgba(201,168,76,0.03) 0px,rgba(201,168,76,0.03) 1px,transparent 1px,transparent 40px),repeating-linear-gradient(-45deg,rgba(201,168,76,0.03) 0px,rgba(201,168,76,0.03) 1px,transparent 1px,transparent 40px)}
-  input,select{font-family:inherit;font-size:13px;color:var(--text);background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:8px 10px;outline:none;width:100%;transition:border-color .15s,box-shadow .15s}
-  input::placeholder{color:var(--text3)}
-  input:focus,select:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-glow)}
-  button{font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--border2);border-radius:6px;background:var(--surface2);color:var(--text2);padding:7px 14px;transition:all .15s;letter-spacing:.01em}
-  button:hover{background:var(--surface3);color:var(--text);border-color:var(--gold)}
-  button.primary{background:linear-gradient(135deg,var(--gold) 0%,var(--gold-dk) 100%);color:#09122B;border-color:var(--gold);font-weight:600;letter-spacing:.04em}
-  button.primary:hover{background:linear-gradient(135deg,var(--gold-lt) 0%,var(--gold) 100%);box-shadow:0 4px 16px var(--gold-glow)}
-  .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem;box-shadow:0 2px 20px rgba(0,0,0,0.25)}
-  .hidden{display:none!important}
-  .row{display:flex;align-items:center;gap:10px}
-  table{width:100%;border-collapse:collapse}
-  th{text-align:left;padding:8px 10px;font-size:11px;font-weight:600;color:var(--gold);border-bottom:1px solid var(--border)}
-  td{padding:10px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle;color:var(--text)}
-  .mono{font-family:'DM Mono',monospace;letter-spacing:.03em}
-  .spinner{width:22px;height:22px;border:2px solid var(--border2);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;margin:2rem auto}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  .avatar{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;flex-shrink:0;border:1.5px solid var(--border2)}
-  #header{background:linear-gradient(90deg,var(--navy) 0%,var(--navy2) 100%);border-bottom:1px solid var(--border2);padding:.875rem 1.5rem;display:flex;align-items:center;gap:12px;flex-wrap:wrap;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,0.4)}
-  #main{max-width:960px;margin:0 auto;padding:1.5rem 1.25rem}
-  .nav-btn{padding:6px 16px;border-radius:99px;font-size:12px;letter-spacing:.04em;text-transform:uppercase;font-weight:500}
-  .nav-btn.active{background:var(--gold-glow);color:var(--gold);border-color:var(--border2);box-shadow:0 0 12px var(--gold-glow)}
-  .tab-row{display:flex;gap:3px;background:var(--surface2);padding:4px;border-radius:9px;margin-bottom:1rem;border:1px solid var(--border)}
-  .tab-btn{flex:1;padding:7px 6px;border:none;background:transparent;color:var(--text3);border-radius:6px;font-size:11px;letter-spacing:.03em;text-transform:uppercase;font-weight:500}
-  .tab-btn.active{background:var(--gold-glow);color:var(--gold);box-shadow:inset 0 0 0 1px rgba(201,168,76,0.35);font-weight:600}
-  .drop-zone{border:1.5px dashed var(--border2);border-radius:10px;padding:2rem;text-align:center;cursor:pointer;transition:all .2s}
-  .drop-zone:hover{border-color:var(--gold);background:var(--gold-glow)}
-  .info{background:var(--gold-glow);border:1px solid rgba(201,168,76,0.25);border-radius:6px;padding:9px 13px;font-size:12px;color:var(--gold-lt);margin-bottom:12px}
-  .podium{display:flex;align-items:flex-end;justify-content:center;gap:8px;margin-bottom:1.5rem}
-  .podium-col{display:flex;flex-direction:column;align-items:center;flex:1;max-width:180px}
-  .podium-bar{width:100%;border-radius:8px 8px 0 0;border:1px solid var(--border);display:flex;align-items:center;justify-content:center}
-  label.lbl{display:block;font-size:11px;color:var(--text2);margin-bottom:4px;margin-top:10px;letter-spacing:.04em;text-transform:uppercase;font-weight:500}
-  #login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem;background:var(--bg)}
-  .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem;position:relative;overflow:hidden}
-  .stat-num{font-size:26px;font-weight:600;line-height:1;margin-top:4px;color:var(--gold)}
-  .stat-label{font-size:12px;color:var(--text2);margin-top:2px;text-transform:uppercase;letter-spacing:.04em}
+:root{
+  --navy:#0D1B3E;--navy2:#162248;--navy3:#1E2F5A;--navy-lt:#243570;
+  --gold:#C9A84C;--gold-lt:#F0D98B;--gold-dk:#9B7A2A;--gold-glow:rgba(201,168,76,0.18);
+  --bg:#09122B;--surface:#162248;--surface2:#1E2F5A;--surface3:#243570;
+  --border:rgba(201,168,76,0.18);--border2:rgba(201,168,76,0.32);
+  --text:#F0E6C8;--text2:#A8B4CC;--text3:#6B7A99;
+  --red:#D4574A;--red-lt:rgba(212,87,74,0.15);
+  --purple:#7B6FD4;--purple-lt:rgba(123,111,212,0.18);
+  --green:#C9A84C;--green-lt:rgba(201,168,76,0.15);--green-dk:#9B7A2A;
+  font-family:'DM Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;background-image:repeating-linear-gradient(45deg,rgba(201,168,76,0.03) 0px,rgba(201,168,76,0.03) 1px,transparent 1px,transparent 40px),repeating-linear-gradient(-45deg,rgba(201,168,76,0.03) 0px,rgba(201,168,76,0.03) 1px,transparent 1px,transparent 40px)}
+input,select{font-family:inherit;font-size:13px;color:var(--text);background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:8px 10px;outline:none;width:100%;transition:border-color .15s,box-shadow .15s}
+input::placeholder{color:var(--text3)}
+input:focus,select:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-glow)}
+button{font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--border2);border-radius:6px;background:var(--surface2);color:var(--text2);padding:7px 14px;transition:all .15s;letter-spacing:.01em}
+button:hover{background:var(--surface3);color:var(--text);border-color:var(--gold)}
+button.primary{background:linear-gradient(135deg,var(--gold) 0%,var(--gold-dk) 100%);color:#09122B;border-color:var(--gold);font-weight:600;letter-spacing:.04em}
+button.primary:hover{background:linear-gradient(135deg,var(--gold-lt) 0%,var(--gold) 100%);box-shadow:0 4px 16px var(--gold-glow)}
+button:disabled{opacity:.4;cursor:not-allowed}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem;box-shadow:0 2px 20px rgba(0,0,0,0.25)}
+.hidden{display:none!important}
+.row{display:flex;align-items:center;gap:10px}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:8px 10px;font-size:11px;font-weight:600;color:var(--gold);border-bottom:1px solid var(--border)}
+td{padding:10px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle;color:var(--text)}
+.mono{font-family:'DM Mono',monospace;letter-spacing:.03em}
+.spinner{width:22px;height:22px;border:2px solid var(--border2);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;margin:2rem auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.avatar{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;flex-shrink:0;border:1.5px solid var(--border2)}
+#header{background:linear-gradient(90deg,var(--navy) 0%,var(--navy2) 100%);border-bottom:1px solid var(--border2);padding:.875rem 1.5rem;display:flex;align-items:center;gap:12px;flex-wrap:wrap;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,0.4)}
+#main{max-width:960px;margin:0 auto;padding:1.5rem 1.25rem}
+.nav-btn{padding:6px 16px;border-radius:99px;font-size:12px;letter-spacing:.04em;text-transform:uppercase;font-weight:500}
+.nav-btn.active{background:var(--gold-glow);color:var(--gold);border-color:var(--border2);box-shadow:0 0 12px var(--gold-glow)}
+.tab-row{display:flex;gap:3px;background:var(--surface2);padding:4px;border-radius:9px;margin-bottom:1rem;border:1px solid var(--border)}
+.tab-btn{flex:1;padding:7px 6px;border:none;background:transparent;color:var(--text3);border-radius:6px;font-size:11px;letter-spacing:.03em;text-transform:uppercase;font-weight:500}
+.tab-btn.active{background:var(--gold-glow);color:var(--gold);box-shadow:inset 0 0 0 1px rgba(201,168,76,0.35);font-weight:600}
+.drop-zone{border:1.5px dashed var(--border2);border-radius:10px;padding:2rem;text-align:center;cursor:pointer;transition:all .2s}
+.drop-zone:hover{border-color:var(--gold);background:var(--gold-glow)}
+.info{background:var(--gold-glow);border:1px solid rgba(201,168,76,0.25);border-radius:6px;padding:9px 13px;font-size:12px;color:var(--gold-lt);margin-bottom:12px}
+.podium{display:flex;align-items:flex-end;justify-content:center;gap:8px;margin-bottom:1.5rem}
+.podium-col{display:flex;flex-direction:column;align-items:center;flex:1;max-width:180px}
+.podium-bar{width:100%;border-radius:8px 8px 0 0;border:1px solid var(--border);display:flex;align-items:center;justify-content:center}
+label.lbl{display:block;font-size:11px;color:var(--text2);margin-bottom:4px;margin-top:10px;letter-spacing:.04em;text-transform:uppercase;font-weight:500}
+#login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem;background:var(--bg)}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem;position:relative;overflow:hidden}
+.stat-num{font-size:26px;font-weight:600;line-height:1;margin-top:4px;color:var(--gold)}
+.stat-label{font-size:12px;color:var(--text2);margin-top:2px;text-transform:uppercase;letter-spacing:.04em}
 </style>
 
 <script>
@@ -121,7 +131,7 @@ var ADMIN_EMAIL   = "chuynh@lasdschools.org";
         </div>
       </div>
 
-      <!-- ROSTER PANE -->
+      <!-- ROSTER -->
       <div id="pane-roster" class="card">
         <div class="row" style="margin-bottom:12px;flex-wrap:wrap;gap:8px">
           <select id="roster-period" onchange="renderRoster()" style="width:auto"><option value="all">All Periods</option></select>
@@ -134,9 +144,7 @@ var ADMIN_EMAIL   = "chuynh@lasdschools.org";
         </table></div>
       </div>
 
-      <!-- Other panes (Upload, Add, Progress, Skills, Share) remain the same as before -->
-
-      <!-- PROGRESS PANE -->
+      <!-- PROGRESS -->
       <div id="pane-progress" class="hidden">
         <div class="row" style="margin-bottom:12px;flex-wrap:wrap">
           <select id="prog-skill" onchange="renderProgress()" style="width:auto"></select>
@@ -151,7 +159,35 @@ var ADMIN_EMAIL   = "chuynh@lasdschools.org";
 
     <!-- STUDENT PORTAL -->
     <div id="view-student" class="hidden" style="max-width:500px;margin:0 auto">
-      <!-- Student selection and verification screens remain the same -->
+      <div id="p-select">
+        <div style="font-size:15px;font-weight:600;margin-bottom:4px">Select your name</div>
+        <div style="color:var(--text2);font-size:13px;margin-bottom:14px">Find your name below, then enter your animal code.</div>
+
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px">
+          <input id="p-search" placeholder="🔍 Type your name to search…" oninput="renderStudentList()" style="font-size:15px;padding:11px 14px;border-radius:10px"/>
+          <div style="display:flex;gap:8px">
+            <select id="p-period-filter" onchange="renderStudentList()" style="flex:1;width:auto"><option value="all">All Periods</option></select>
+            <select id="p-sort" onchange="renderStudentList()" style="flex:1;width:auto"><option value="first">A–Z by First Name</option><option value="last">A–Z by Last Name</option></select>
+          </div>
+        </div>
+
+        <div id="p-alpha" style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:10px"></div>
+        <div id="p-count" style="font-size:12px;color:var(--text2);margin-bottom:8px"></div>
+        <div id="p-list" style="display:flex;flex-direction:column;gap:6px;max-height:58vh;overflow-y:auto;padding-right:2px"></div>
+      </div>
+
+      <div id="p-verify" class="card hidden">
+        <button onclick="portalBack()" style="border:none;background:none;color:var(--text2);cursor:pointer;padding:0;margin-bottom:16px;font-size:13px">← Back</button>
+        <div class="row" style="margin-bottom:20px">
+          <div id="v-avatar" class="avatar" style="width:48px;height:48px;font-size:16px"></div>
+          <div><div id="v-name" style="font-weight:600;font-size:16px"></div><div style="font-size:13px;color:var(--text2)">Enter your animal code</div></div>
+        </div>
+        <label class="lbl">Access code</label>
+        <input id="v-code" class="mono" placeholder="e.g. BlueTiger42" style="font-size:15px;margin-bottom:8px" onkeydown="if(event.key==='Enter')verifyCode()"/>
+        <div id="v-error" class="hidden" style="color:var(--red);font-size:13px;margin-bottom:8px"></div>
+        <button class="primary" style="width:100%;padding:10px" onclick="verifyCode()">Confirm Identity</button>
+        <div style="font-size:11px;color:var(--text3);margin-top:10px;text-align:center">Lost your code? Ask your teacher.</div>
+      </div>
 
       <div id="p-dash" class="hidden">
         <div class="row" style="margin-bottom:1.25rem">
@@ -176,7 +212,6 @@ var ADMIN_EMAIL   = "chuynh@lasdschools.org";
           <div id="p-progress"></div>
         </div>
 
-        <!-- Quick Goals Summary -->
         <div class="card" style="margin-top:12px; border-color: rgba(201,168,76,0.3)">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px">
             <div style="font-weight:600;font-size:14px">🎯 Your Goals</div>
@@ -186,22 +221,87 @@ var ADMIN_EMAIL   = "chuynh@lasdschools.org";
         </div>
       </div>
     </div>
-
-    <!-- LEADERBOARD, PROFILE, ADMIN remain the same -->
-
   </div>
 </div>
 
-<!-- Modals (Email, Profile, QR) remain the same -->
+<!-- Modals -->
+<div id="modal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,0.38);z-index:900;display:flex;align-items:center;justify-content:center;padding:1rem">
+  <div class="card" style="width:100%;max-width:520px;max-height:86vh;overflow-y:auto;padding:0">
+    <div class="row" style="padding:1.1rem 1.25rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface)">
+      <span style="font-weight:600;font-size:15px">✉ Email Access Codes</span>
+      <button onclick="closeModal()" style="margin-left:auto;border:none;background:none;font-size:20px;color:var(--text2);cursor:pointer">×</button>
+    </div>
+    <div style="padding:1.25rem">
+      <div class="info">Emails send via Resend.</div>
+      <div id="email-list"></div>
+    </div>
+  </div>
+</div>
 
 <script>
-// ==================== FULL JAVASCRIPT ====================
-// All your existing JavaScript + the fixed submitScores below
+// ==================== COMPLETE WORKING JAVASCRIPT ====================
 
-// ... (all previous functions remain exactly the same until submitScores)
+const SUPABASE_URL = "https://vsycqimhkzppautumsyo.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzeWNxaW1oa3pwcGF1dHVtc3lvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4MTMyMjEsImV4cCI6MjA5MzM4OTIyMX0.upBxit5d5nA6b9oVy8CbxIbzpO2m7_Df27IgKjg3l2k";
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let ME = null, profile = null, students = [], skills = [], entries = {}, portalStudent = null, studentGoals = {};
+
+// ==================== LOGIN ====================
+async function doAuth() {
+  const email = document.getElementById("l-email").value.trim();
+  const pass = document.getElementById("l-pass").value;
+  
+  if (!email || !pass) {
+    alert("Please enter email and password");
+    return;
+  }
+
+  try {
+    const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+    if (error) throw error;
+    
+    ME = data.user;
+    document.getElementById("login-wrap").classList.add("hidden");
+    document.getElementById("app").classList.remove("hidden");
+    
+    await loadProfile();
+    await loadData();
+  } catch (error) {
+    alert("Login failed: " + error.message);
+  }
+}
+
+async function loadProfile() {
+  const { data } = await sb.from("teachers").select("*").eq("id", ME.id).single();
+  profile = data || {};
+  document.getElementById("header-sub").textContent = (profile.name || ME.email) + (profile.school ? " · " + profile.school : "");
+}
+
+async function loadData() {
+  const { data: studs } = await sb.from("students").select("*").eq("teacher_id", ME.id).order("last");
+  students = studs || [];
+  
+  const { data: skls } = await sb.from("skills").select("*").eq("teacher_id", ME.id).order("created_at");
+  skills = skls || [];
+  
+  entries = {};
+  if (students.length) {
+    const ids = students.map(s => s.id);
+    const { data: ents } = await sb.from("entries").select("*").in("student_id", ids).order("logged_at");
+    (ents || []).forEach(e => {
+      if (!entries[e.student_id]) entries[e.student_id] = {};
+      if (!entries[e.student_id][e.skill_id]) entries[e.student_id][e.skill_id] = [];
+      entries[e.student_id][e.skill_id].push(Number(e.value));
+    });
+  }
+  
+  renderRoster();
+  renderProgress();
+}
 
 // ==================== FIXED submitScores ====================
-async function submitScores(){
+async function submitScores() {
   const btn = document.getElementById("submit-btn");
   btn.disabled = true;
   btn.textContent = "Saving…";
@@ -240,10 +340,94 @@ async function submitScores(){
   btn.textContent = "Submit Scores";
 }
 
-// ... (rest of your JavaScript remains the same)
-</script>
+// ==================== BASIC FUNCTIONS ====================
+function renderRoster() {
+  const tb = document.getElementById("roster-body");
+  if (!students.length) {
+    tb.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:2rem">No students yet.</td></tr>`;
+    return;
+  }
+  tb.innerHTML = students.map(s => `
+    <tr>
+      <td><div class="row">${s.first} ${s.last}</div></td>
+      <td>${s.grade}</td>
+      <td>P${s.period}</td>
+      <td><span class="mono">${s.access_code}</span></td>
+      <td>${getVals(s.id).length}</td>
+      <td><button onclick="deleteStudent('${s.id}')">Delete</button></td>
+    </tr>
+  `).join("");
+}
 
-<!-- Profile Modal + QR Modal remain the same -->
+function renderProgress() {
+  const tb = document.getElementById("prog-body");
+  if (!students.length) {
+    tb.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:2rem">No data.</td></tr>`;
+    return;
+  }
+  tb.innerHTML = students.map(s => `
+    <tr>
+      <td>${s.first} ${s.last}</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+  `).join("");
+}
+
+function renderDash() {
+  // Basic student dashboard
+  document.getElementById("d-name").textContent = `${portalStudent.first} ${portalStudent.last}`;
+  document.getElementById("d-sub").textContent = `Grade ${portalStudent.grade} · Period ${portalStudent.period}`;
+  
+  // Entry fields
+  document.getElementById("entry-fields").innerHTML = skills.map(sk => `
+    <div style="margin-bottom:12px">
+      <label>${sk.name} (${sk.unit})</label>
+      <input type="number" step="0.1" id="ef-${sk.id}" placeholder="Enter ${sk.unit}">
+    </div>
+  `).join("");
+  
+  // Progress
+  document.getElementById("p-progress").innerHTML = skills.map(sk => `
+    <div>${sk.name}: ${getLastVal(portalStudent.id, sk.id) || "No data"}</div>
+  `).join("");
+  
+  // Goals summary
+  const goalsSummary = document.getElementById("student-goals-summary");
+  if (goalsSummary) goalsSummary.innerHTML = "Goals will appear here after you set them.";
+}
+
+function getVals(sid) {
+  return entries[sid] ? Object.values(entries[sid]).flat() : [];
+}
+
+function getLastVal(sid, skid) {
+  return entries[sid]?.[skid]?.[entries[sid][skid].length - 1] || null;
+}
+
+function setView(v) {
+  document.querySelectorAll('[id^="view-"]').forEach(el => el.classList.add("hidden"));
+  document.getElementById(`view-${v}`).classList.remove("hidden");
+}
+
+function setTab(t) {
+  document.querySelectorAll('[id^="pane-"]').forEach(el => el.classList.add("hidden"));
+  document.getElementById(`pane-${t}`).classList.remove("hidden");
+}
+
+// Boot
+window.addEventListener("DOMContentLoaded", () => {
+  console.log("PE Tracker loaded successfully");
+});
+
+// Make functions global
+window.doAuth = doAuth;
+window.setView = setView;
+window.setTab = setTab;
+window.submitScores = submitScores;
+</script>
 
 </body>
 </html>
