@@ -502,9 +502,7 @@ function avHTML(f,l,sz=28){return `<div class="avatar" style="${avStyle(f,l,sz)}
 
 // ── Sparkline ─────────────────────────────────────────────────
 function spark(vals,lb){
-  if(!vals || vals.length === 0) return '<span style="color:var(--text3)">—</span>';
-  if(vals.length === 1) return '<span style="color:var(--gold);font-size:11px">New</span>';
-  
+  if(!vals||vals.length<2)return '<span style="color:var(--text3)">—</span>';
   const w=72,h=28,p=4,mn=Math.min(...vals),mx=Math.max(...vals),r=mx-mn||1;
   const pts=vals.map((v,i)=>`${p+(i/(vals.length-1))*(w-p*2)},${p+((lb?v-mn:mx-v)/r)*(h-p*2)}`).join(" ");
   const ok=lb?vals[vals.length-1]<vals[0]:vals[vals.length-1]>vals[0];
@@ -841,13 +839,39 @@ function renderDash(){
 }
 async function submitScores(){
   const btn=document.getElementById("submit-btn");btn.disabled=true;btn.textContent="Saving…";
-  const week=`Week of ${new Date().toLocaleDateString("en-US",{month:"short",day:"numeric"})}`;
-  const rows=skills.filter(sk=>{const v=document.getElementById(`ef-${sk.id}`)?.value;return v!==undefined&&v!=="";}).map(sk=>({student_id:portalStudent.id,skill_id:sk.id,value:parseFloat(document.getElementById(`ef-${sk.id}`).value),week_label:week}));
-  if(rows.length){await sb.from("entries").upsert(rows,{onConflict:"student_id,skill_id,week_label"});await loadData();renderDash();}
-  const ok=document.getElementById("entry-ok");ok.classList.remove("hidden");
-  skills.forEach(sk=>{const el=document.getElementById(`ef-${sk.id}`);if(el)el.value="";});
-  setTimeout(()=>ok.classList.add("hidden"),3000);
-  btn.disabled=false;btn.textContent="Submit Scores";
+  const now = new Date();
+  const weekLabel = `Week of ${now.toLocaleDateString("en-US",{month:"short",day:"numeric"})}`;
+  
+  const rows = skills
+    .filter(sk => {
+      const v = document.getElementById(`ef-${sk.id}`)?.value;
+      return v !== undefined && v !== "";
+    })
+    .map(sk => ({
+      student_id: portalStudent.id,
+      skill_id: sk.id,
+      value: parseFloat(document.getElementById(`ef-${sk.id}`).value),
+      week_label: weekLabel,
+      logged_at: now.toISOString()   // Add timestamp for proper history
+    }));
+
+  if (rows.length) {
+    // Always insert new row (do NOT use onConflict) so we keep full history
+    const { error } = await sb.from("entries").insert(rows);
+    if (error) {
+      alert("Error saving scores: " + error.message);
+    } else {
+      await loadData();
+      renderDash();
+    }
+  }
+
+  const ok = document.getElementById("entry-ok");
+  ok.classList.remove("hidden");
+  skills.forEach(sk => { const el = document.getElementById(`ef-${sk.id}`); if (el) el.value = ""; });
+  setTimeout(() => ok.classList.add("hidden"), 3000);
+  btn.disabled = false;
+  btn.textContent = "Submit Scores";
 }
 function portalOut(){portalStudent=null;document.getElementById("p-dash").classList.add("hidden");document.getElementById("p-select").classList.remove("hidden");}
 
